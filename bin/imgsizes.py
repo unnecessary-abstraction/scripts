@@ -20,21 +20,23 @@ import os
 import subprocess
 import sys
 
+
 def usage():
     print(f"Usage: {sys.argv[0]} SOURCE_PATH")
-    print("  Create `800` and `1920` versions of each image in SOURCE_PATH.")
+    print("  Create optimised 800px and 1920px versions of each image in SOURCE_PATH.")
+
 
 if len(sys.argv) != 2:
     usage()
     sys.exit(1)
 
-if sys.argv[1] in ('-h', '--help'):
+if sys.argv[1] in ("-h", "--help"):
     usage()
     sys.exit(0)
 
 SOURCE_PATH = sys.argv[1]
 if not os.path.exists(SOURCE_PATH):
-    print(f"Source path \"{SOURCE_PATH}\" does not exist!")
+    print(f"Source path '{SOURCE_PATH}' does not exist!")
     sys.exit(1)
 
 if os.path.isdir(SOURCE_PATH):
@@ -52,32 +54,46 @@ for i, src in enumerate(sources):
     print(f"[{i+1}/{count}] {src}", end="", flush=True)
     dst = os.path.basename(src)
     try:
-        subprocess.run([
-            "convert",
-            "-verbose",
-            "-resize", "1920x1920>",
-            "-strip",
-            "-interlace", "JPEG",
-            "-quality", "92%",
-            "-colorspace", "RGB",
-            src, f"1920/{dst}"],
-            stdout=logfile, stderr=logfile, check=True)
+        subprocess.run(
+            [
+                # fmt: off
+                "convert",
+                "-verbose",
+                "-strip",
+                "-resize", "1920x1920>",
+                "-interlace", "JPEG",
+                "-quality", "92%",
+                "-colorspace", "RGB",
+                src, f"1920/{dst}",
+                # fmt: on
+            ],
+            stdout=logfile,
+            stderr=logfile,
+            check=True,
+        )
         print(" [1920 ✔]", end="", flush=True)
     except subprocess.CalledProcessError:
         had_error = True
         print(" [1920 ✖]", end="", flush=True)
     try:
-        subprocess.run([
-            "convert",
-            "-verbose",
-            "-resize", "800x800>",
-            "-sampling-factor", "4:2:0",
-            "-strip",
-            "-interlace", "JPEG",
-            "-quality", "80%",
-            "-colorspace", "RGB",
-            src, f"800/{dst}"],
-            stdout=logfile, stderr=logfile, check=True)
+        subprocess.run(
+            [
+                # fmt: off
+                "convert",
+                "-verbose",
+                "-strip",
+                "-resize", "800x800>",
+                "-sampling-factor", "4:2:0",
+                "-interlace", "JPEG",
+                "-quality", "80%",
+                "-colorspace", "RGB",
+                src, f"800/{dst}",
+                # fmt: on
+            ],
+            stdout=logfile,
+            stderr=logfile,
+            check=True,
+        )
         print(" [800 ✔]", flush=True)
     except subprocess.CalledProcessError:
         had_error = True
