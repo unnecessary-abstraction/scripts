@@ -78,7 +78,7 @@ with tempfile.NamedTemporaryFile() as tmpf:
     subprocess.run(["b2sum", *files_list], stdout=tmpf, check=True)
     subprocess.run(
         ["gpg", "-as", "--clearsign", "-u", KEYID, "-o", checksum_path, tmpf.name],
-        check=True
+        check=True,
     )
 set_readonly(checksum_path)
 set_readonly(".")
@@ -86,7 +86,11 @@ set_readonly(".")
 # Create encrypted tarball
 tarball_path = os.path.join(out_dir, f"{IDENT}.archive")
 with tempfile.NamedTemporaryFile(dir=out_dir) as tmpf:
-    subprocess.run(["tar", "-c", "--zstd", "B2SUMS", *files_list], stdout=tmpf, check=True)
-    subprocess.run(["gpg", "-e", "-r", KEYID, "-o", tarball_path, tmpf.name], check=True)
+    subprocess.run(
+        ["tar", "-c", "--zstd", "B2SUMS", *files_list], stdout=tmpf, check=True
+    )
+    subprocess.run(
+        ["gpg", "-e", "-r", KEYID, "-o", tarball_path, tmpf.name], check=True
+    )
 set_readonly(tarball_path)
 print(f"Encrypted archive: {tarball_path}")
