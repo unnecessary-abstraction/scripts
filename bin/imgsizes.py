@@ -6,10 +6,10 @@
 This script creates two new alternative versions of each image in the source
 path given on the command line:
 
-* 800: This version is indended for embedding in web pages or using as a
+* 800: This version is intended for embedding in web pages or using as a
   preview. It's optimised for small file size and progressive loading.
 
-* 1920: This version is indended for full screen viewing on a typical 1080p
+* 1920: This version is intended for full screen viewing on a typical 1080p
   display whilst keeping a moderate file size.
 
 Output directories are created for each of these alternatives so that filenames
@@ -63,7 +63,7 @@ for i, src in enumerate(sources):
                 "-resize", "1920x1920>",
                 "-interlace", "JPEG",
                 "-quality", "92%",
-                "-colorspace", "RGB",
+                "-colorspace", "sRGB",
                 src, f"1920/{dst}",
                 # fmt: on
             ],
@@ -86,7 +86,7 @@ for i, src in enumerate(sources):
                 "-sampling-factor", "4:2:0",
                 "-interlace", "JPEG",
                 "-quality", "80%",
-                "-colorspace", "RGB",
+                "-colorspace", "sRGB",
                 src, f"800/{dst}",
                 # fmt: on
             ],
